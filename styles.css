@@ -1,0 +1,155 @@
+:root{
+    --bg:#536872; --ink:#E8E5E0; --accent:#A5B0B6;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%; margin:0; color:var(--ink); background:var(--bg); font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans";}
+  
+  /* Scroll snap slides */
+  html{ scroll-behavior:smooth; }
+  .slides{
+    height:100svh;
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    overscroll-behavior:contain;
+  }
+  .slide{
+    min-height:100svh;
+    scroll-snap-align:start;
+    display:grid; place-items:center;
+    padding:clamp(16px,4vw,48px);
+  }
+  .slide--hero{background:#536872; padding: 0;}
+  .slide--work{background:#332421;}
+  .slide--contact{background:#1a1f27;}
+  h2{margin:0 0 .5em;}
+  
+  /* ========== CRT hero from your current code ========== */
+  .hero {
+    position: relative;
+    height: 100vh;              /* fill viewport */
+    width: 100%;
+    overflow: hidden;
+    isolation: isolate;         /* keeps z-index layering clean */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .hero .hero-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          /* ensures full coverage */
+    object-position: center;
+    filter: saturate(.9);
+    z-index: 0;                 /* image is the base layer */
+  }
+  
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(70% 60% at 50% 45%,transparent 0 60%,rgba(32,42,68,0.5) 100%);
+    z-index:1;
+  }
+  .crt-screen{
+    position:absolute;display:grid;align-items:start;
+    padding:clamp(10px,1.2vw,18px);
+    background:rgba(14,21,14,0.745);
+    box-shadow:inset 0 0 0.8vmin rgba(165,176,182,0.15),
+                inset 0 0 2.2vmin rgba(165,176,182,0.25);
+    backdrop-filter:blur(1px);
+    overflow:hidden;
+    z-index: 2;
+  }
+  .crt-screen::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(to bottom,rgba(255,255,255,0.05) 0 1px,rgba(0,0,0,0) 1px 3px);
+    mix-blend-mode:soft-light;pointer-events:none;
+  }
+  .typewrap{
+    width:100%;max-width:100%;
+    font:600 clamp(12px,1.8vw,22px)/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    color: #FFCE1B;white-space:pre;overflow:hidden;
+  }
+  .caret{
+    display:inline-block;width:.6ch;translate:0 .05em;
+    border-right:2px solid #A5B0B6;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{border-color:transparent;}}
+  @media(prefers-reduced-motion:reduce){.caret{animation:none;}}
+
+/* Up/Down key buttons */
+.nav-keys{
+  position: fixed;
+  right: clamp(16px, 3vw, 28px);
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  gap: clamp(10px, 1.5vw, 16px);
+  z-index: 20;
+}
+
+.nav-key{
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  opacity: .9;
+  transition: transform .15s ease, opacity .2s ease, filter .2s ease;
+}
+
+.nav-key img{
+  width: clamp(44px, 5vw, 70px);
+  height: auto;
+  display: block;
+  
+}
+/* Nudge size difference manually */
+.nav-up img {
+  width: clamp(50px, 5vw, 72px);
+}
+
+.nav-down img {
+  width: clamp(52px, 5.3vw, 75px); 
+  transform: translateX(-2px); 
+}
+
+.nav-key:hover   { opacity: 1; transform: translateY(1px) scale(1.04); }
+.nav-key:active  { transform: translateY(2px) scale(0.98); }
+
+
+
+/* optional: hide keys on very small heights */
+@media (max-height: 520px){
+  .nav-keys{ display: none; }
+}
+
+  
+  .keyhint{
+    position:fixed;left:50%;bottom:14px;translate:-50% 0;
+    font-size:.9rem;color:var(--ink);opacity:.8;
+    background:rgba(0,0,0,.35);padding:.35rem .6rem;border-radius:.5rem;
+  }
+
+  
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    user-select: none;
+    color: goldenrod; /* vintage gold tone */
+    text-shadow:
+      0 0 4px rgba(255, 215, 120, 0.7),
+      0 0 8px rgba(255, 230, 150, 0.5);
+    opacity: 0.9;
+    animation: sparkleFade 0.7s ease-out forwards;
+    mix-blend-mode: screen;
+    z-index: 9999;
+  }
+  
+  @keyframes sparkleFade {
+    0%   { transform: scale(0.6) rotate(0deg); opacity: 1; }
+    50%  { transform: scale(1.2) rotate(15deg); opacity: 0.9; }
+    100% { transform: scale(0.8) rotate(30deg); opacity: 0; }
+  }
+  

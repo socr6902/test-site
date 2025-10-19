@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sophia Crawshaw — CRT Typing Intro</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    
+    <!-- Up/Down key navigation -->
+    <div class="nav-keys" aria-label="Section navigation">
+      <!-- Up button -->
+      <button class="nav-key nav-up" id="keyUp" aria-label="Previous section">
+        <img src="images/up-key.png" alt="Up arrow key">
+      </button>
+
+      <!-- Down button -->
+      <button class="nav-key nav-down" id="keyDown" aria-label="Next section">
+        <img src="images/down-key.png" alt="Down arrow key">
+      </button>
+    </div>
+
+
+
+  <div class="keyhint">Use ↑ / ↓ to navigate</div>
+
+  <main class="slides" id="slides" tabindex="-1">
+    <!-- Slide 1: CRT intro -->
+    <section class="slide slide--hero" id="s1">
+      <div class="hero" id="hero">
+        <img id="heroImg" class="hero-img" src="/images/computer.jpg" alt="Retro computer" />
+        <div id="screen" class="crt-screen" aria-live="polite" aria-atomic="true">
+          <div class="typewrap" id="typeTarget"
+              data-text="Hi, I’m Sophia Crawshaw.\n\nI create accessible,\naesthetic web experiences.">
+            <span class="caret"></span>
+          </div>
+        </div>
+      </div>
+      
+    </section>
+
+    <!-- Slide 2: Work -->
+    <section class="slide slide--work" id="s2">
+      <div>
+        <h2>Selected Work</h2>
+        <p class="lead">Case studies, prototypes, and front-end builds.</p>
+      </div>
+    </section>
+
+    <!-- Slide 3: Contact -->
+    <section class="slide slide--contact" id="s3">
+      <div>
+        <h2>Contact</h2>
+        <p class="lead">sophiavcrawshaw@gmail.com • LinkedIn • GitHub</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js.js"></script>
+</body>
+</html>
