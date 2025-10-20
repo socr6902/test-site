@@ -1,6 +1,6 @@
 /* ---------- lock overlay to image ---------- */
 const IMG_NAT = { w: 5490, h: 3402 };
-const SCREEN_BOX = { x: 1895, y: 450, w: 1675, h: 1320 };
+const SCREEN_BOX = { x: 1900, y: 450, w: 1670, h: 1345 };
 
 (function lockOverlay(){
   const hero = document.getElementById('hero');
@@ -66,42 +66,44 @@ document.addEventListener('mousemove', e => {
   setTimeout(() => sparkle.remove(), 700);
 });
 
-/* ---------- up/down navigation via buttons + keyboard ---------- */
 (function(){
-  const container = document.getElementById('slides');
-  const sections  = Array.from(container.querySelectorAll('section.slide'));
-  const upBtn     = document.getElementById('keyUp');
-  const downBtn   = document.getElementById('keyDown');
+  const container=document.getElementById('slides');
+  const sections=[...container.querySelectorAll('section.slide')];
+  const dots=[...document.querySelectorAll('.dot')];
 
   function currentIndex(){
-    let idx = 0, min = Infinity;
+    let idx=0,min=Infinity;
     sections.forEach((s,i)=>{
-      const d = Math.abs(s.getBoundingClientRect().top);
-      if (d < min) { min = d; idx = i; }
+      const d=Math.abs(s.getBoundingClientRect().top);
+      if(d<min){min=d;idx=i;}
     });
     return idx;
   }
 
-  function go(delta){
-    const i = currentIndex();
-    const target = sections[Math.max(0, Math.min(sections.length - 1, i + delta))];
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function goToIndex(i){
+    const clamped=Math.max(0,Math.min(sections.length-1,i));
+    sections[clamped].scrollIntoView({behavior:'smooth'});
+    updateDots(clamped);
   }
 
-  upBtn?.addEventListener('click',  () => go(-1));
-  downBtn?.addEventListener('click', () => go(1));
+  window.addEventListener('keydown',e=>{
+    const tag=document.activeElement?.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable) return;
+    const idx=currentIndex();
+    if(['ArrowDown','PageDown'].includes(e.key)){ e.preventDefault(); goToIndex(idx+1); }
+    if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); goToIndex(idx-1); }
+  });
 
-  // Keyboard: ArrowUp/ArrowDown, PageUp/PageDown, Space/Shift+Space (accessible)
-  window.addEventListener('keydown', (e) => {
-    const tag = document.activeElement?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+  dots.forEach((btn,i)=>btn.addEventListener('click',()=>goToIndex(i)));
 
-    if (e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) {
-      e.preventDefault(); go(1);
-    }
-    if (e.key === 'ArrowUp' || e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) {
-      e.preventDefault(); go(-1);
-    }
-  }, { passive: false });
+  const obs=new IntersectionObserver(ents=>{
+    ents.forEach(ent=>{
+      if(ent.isIntersecting){ updateDots(sections.indexOf(ent.target)); }
+    });
+  },{root:container,threshold:0.6});
+  sections.forEach(s=>obs.observe(s));
+
+  function updateDots(activeIdx){
+    dots.forEach((d,i)=>d.setAttribute('aria-current',i===activeIdx?'true':'false'));
+  }
 })();
-

@@ -8,22 +8,20 @@
 </head>
 <body>
     
-    <!-- Up/Down key navigation -->
-    <div class="nav-keys" aria-label="Section navigation">
-      <!-- Up button -->
-      <button class="nav-key nav-up" id="keyUp" aria-label="Previous section">
-        <img src="images/up-key.png" alt="Up arrow key">
-      </button>
-
-      <!-- Down button -->
-      <button class="nav-key nav-down" id="keyDown" aria-label="Next section">
-        <img src="images/down-key.png" alt="Down arrow key">
-      </button>
-    </div>
+  <div class="dots">
+    <button class="dot" aria-current="true"></button>
+    <button class="dot"></button>
+    <button class="dot"></button>
+  </div>
+  
 
 
 
   <div class="keyhint">Use ↑ / ↓ to navigate</div>
+
+  
+
+
 
   <main class="slides" id="slides" tabindex="-1">
     <!-- Slide 1: CRT intro -->
@@ -32,7 +30,7 @@
         <img id="heroImg" class="hero-img" src="./images/computer.jpg" alt="Retro computer" />
         <div id="screen" class="crt-screen" aria-live="polite" aria-atomic="true">
           <div class="typewrap" id="typeTarget"
-              data-text="Hi, I’m Sophia Crawshaw.\n\nI create accessible,\naesthetic web experiences.">
+              data-text="> system startup initiated...\n> loading web developer v2.0 (Sophia Crawshaw)\n> ready for your next big idea.">
             <span class="caret"></span>
           </div>
         </div>
