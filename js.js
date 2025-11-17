@@ -159,6 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // remember intro played (disabled by default)
       }, 1000);
-    }, 1500);
+    }, 1000);
   });
 });
