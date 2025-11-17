@@ -112,7 +112,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const slides = document.getElementById("slides");
   const typeTarget = document.getElementById("typeTarget");
 
-  // (Previously there was an optional sessionStorage-based skip here; removed to reduce unused commented code.)
+  let introComplete = false;
+
+  // Function to skip intro and go directly to slides
+  function skipIntro() {
+    if (introComplete) return;
+    introComplete = true;
+    
+    if (overlay) {
+      overlay.classList.add("fade-out");
+      setTimeout(() => {
+        overlay.style.display = "none";
+      }, 300);
+    }
+    
+    if (slides) {
+      slides.classList.remove("hidden");
+      slides.classList.add("reveal");
+      slides.querySelector('section.slide')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Allow Enter key to skip intro
+  function handleKeyPress(e) {
+    if (e.key === 'Enter' && !introComplete) {
+      skipIntro();
+      document.removeEventListener('keydown', handleKeyPress);
+    }
+  }
+  document.addEventListener('keydown', handleKeyPress);
 
   // Typing animation watcher (safe: handles missing target)
   function waitForTyping(callback) {
@@ -127,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let index = 0;
 
     function typeChar() {
+      if (introComplete) return; // Stop typing if skipped
       if (index < text.length) {
         // increment first so the final character is rendered
         index++;
@@ -142,23 +171,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   waitForTyping(() => {
+    if (introComplete) return; // Don't proceed if already skipped
+    
     // Hang for 1s after typing completes, then start fade-out animation
     setTimeout(() => {
-      if (overlay) overlay.classList.add("fade-out");
-
-      // Wait for the fade-out animation to finish (matches CSS 1s) then hide/reveal
-      setTimeout(() => {
-        if (overlay) overlay.style.display = "none";
-        if (slides) {
-          slides.classList.remove("hidden");
-          slides.classList.add("reveal");
-
-          // Auto-scroll to the first slide inside the main slides container
-          slides.querySelector('section.slide')?.scrollIntoView({ behavior: 'smooth' });
-        }
-
-  // remember intro played (disabled by default)
-      }, 1000);
+      if (introComplete) return;
+      skipIntro();
+      document.removeEventListener('keydown', handleKeyPress);
     }, 1000);
   });
 });

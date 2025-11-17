@@ -421,16 +421,8 @@ body {
   opacity: 0.9;
   color: var(--color-carbon);
   position: relative;
-  padding-left: 0.5em;
+  padding-left: 0;
   margin-bottom: 0.5em;
-}
-
-.service-item ul li:before {
-  content: "•";
-  position: absolute;
-  left: -1em;
-  color: var(--color-carbon);
-  opacity: 0.6;
 }
 
 .service-item ul li:last-child {
