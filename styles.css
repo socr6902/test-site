@@ -308,7 +308,7 @@ body {
 /* ===== Slide 2: Services ===== */
 
 .slide--services {
-  background: var(--color-cream);
+  background: var(--color-orange);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -375,21 +375,12 @@ body {
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
 }
 
-/* cycle cards through your palette: gold, blush, green, steel */
-.service-item:nth-child(4n + 1) {
-  background: color-mix(in srgb, var(--color-gold) 55%, #ffffff 45%);
-}
-
-.service-item:nth-child(4n + 2) {
-  background: color-mix(in srgb, var(--color-blush) 55%, #ffffff 45%);
-}
-
-.service-item:nth-child(4n + 3) {
-  background: color-mix(in srgb, var(--color-green) 55%, #ffffff 45%);
-}
-
+/* all service items yellow (gold) */
+.service-item:nth-child(4n + 1),
+.service-item:nth-child(4n + 2),
+.service-item:nth-child(4n + 3),
 .service-item:nth-child(4n + 4) {
-  background: color-mix(in srgb, var(--color-steel) 52%, #ffffff 48%);
+  background: color-mix(in srgb, var(--color-gold) 55%, #ffffff 45%);
 }
 
 .service-item h3 {
@@ -416,11 +407,17 @@ body {
   margin-top: 4px;
 }
 
+/* Colored chip cycle – cream */
+.services-tags span:nth-child(3n + 1),
+.services-tags span:nth-child(3n + 2),
+.services-tags span:nth-child(3n + 3) {
+  background: var(--color-cream);
+}
+
 .services-tags span {
   font-size: 0.75rem;
   padding: 5px 11px;
   border-radius: 999px;
-  background: #d2d2d2;
   color: var(--color-carbon);
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -527,7 +524,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, var(--color-blush) 50%, #ffffff 50%);
+  background: color-mix(in srgb, var(--color-orange) 50%, #ffffff 50%);
   color: var(--color-carbon);
   font-size: 0.85rem;
   text-transform: uppercase;
