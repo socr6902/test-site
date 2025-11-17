@@ -129,6 +129,20 @@ body {
   padding: clamp(16px, 4vw, 48px);
 }
 
+/* Allow work slide to have overflow content */
+.slide--work {
+  min-height: auto;
+  scroll-snap-align: start;
+}
+
+/* Snap point at the end of work slide */
+.slide--work::after {
+  content: '';
+  display: block;
+  height: 1px;
+  scroll-snap-align: end;
+}
+
 /* Individual slide backgrounds */
 
 .slide--hero {
