@@ -117,13 +117,15 @@ body {
 .slides {
   height: 100svh;
   overflow-y: auto;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
+  scroll-padding: 0;
   overscroll-behavior: contain;
 }
 
 .slide {
   min-height: 100svh;
   scroll-snap-align: start;
+  scroll-snap-stop: always;
   display: grid;
   place-items: center;
   padding: clamp(16px, 4vw, 48px);
