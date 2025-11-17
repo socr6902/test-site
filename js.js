@@ -29,27 +29,6 @@ const SCREEN_BOX = { x: 1900, y: 450, w: 1670, h: 1345 };
   window.addEventListener('orientationchange', place);
 })();
 
-/* ---------- typing effect ---------- */
-(function(){
-  const el = document.getElementById("typeTarget");
-  if (!el) return;
-  const full = (el.dataset.text || "").replace(/\\n/g,"\n");
-  const caret = el.querySelector(".caret");
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce){ el.textContent = full; return; }
-
-  el.textContent = ""; el.appendChild(caret);
-  let i=0; const base=55, pause=250;
-  (function next(){
-    if (i>=full.length) return;
-    const ch=full[i++]; caret.before(ch);
-    let d=base+Math.random()*80;
-    if (/[.,!?…]/.test(ch)) d+=pause;
-    if (ch===" ") d-=25;
-    setTimeout(next,d);
-  })();
-})();
-
 /* ---------- retro sparkle trail ---------- */
 document.addEventListener('mousemove', e => {
   const sparkle = document.createElement('div');
@@ -67,54 +46,119 @@ document.addEventListener('mousemove', e => {
 });
 
 (function(){
-  const container=document.getElementById('slides');
-  const sections=[...container.querySelectorAll('section.slide')];
-  const dotsContainer=document.getElementById('dots-container');
+  // Guard against missing elements so this helper won't throw and block other scripts
+  try {
+    const container = document.getElementById('slides');
+    const dotsContainer = document.getElementById('dots-container');
+    if (!container || !dotsContainer) return;
 
-  // Generate dots dynamically based on number of slides
-  sections.forEach((_, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'dot';
-    btn.setAttribute('aria-current', i === 0 ? 'true' : 'false');
-    btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
-    dotsContainer.appendChild(btn);
-  });
+    const sections = [...container.querySelectorAll('section.slide')];
 
-  const dots=[...dotsContainer.querySelectorAll('.dot')];
-
-  function currentIndex(){
-    let idx=0,min=Infinity;
-    sections.forEach((s,i)=>{
-      const d=Math.abs(s.getBoundingClientRect().top);
-      if(d<min){min=d;idx=i;}
+    // Generate dots dynamically based on number of slides
+    sections.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'dot';
+      btn.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+      btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dotsContainer.appendChild(btn);
     });
-    return idx;
-  }
 
-  function goToIndex(i){
-    const clamped=Math.max(0,Math.min(sections.length-1,i));
-    sections[clamped].scrollIntoView({behavior:'smooth'});
-    updateDots(clamped);
-  }
+    const dots = [...dotsContainer.querySelectorAll('.dot')];
 
-  window.addEventListener('keydown',e=>{
-    const tag=document.activeElement?.tagName;
-    if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable) return;
-    const idx=currentIndex();
-    if(['ArrowDown','PageDown'].includes(e.key)){ e.preventDefault(); goToIndex(idx+1); }
-    if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); goToIndex(idx-1); }
-  });
+    function currentIndex(){
+      let idx=0,min=Infinity;
+      sections.forEach((s,i)=>{
+        const d=Math.abs(s.getBoundingClientRect().top);
+        if(d<min){min=d;idx=i;}
+      });
+      return idx;
+    }
 
-  dots.forEach((btn,i)=>btn.addEventListener('click',()=>goToIndex(i)));
+    function goToIndex(i){
+      const clamped=Math.max(0,Math.min(sections.length-1,i));
+      sections[clamped].scrollIntoView({behavior:'smooth'});
+      updateDots(clamped);
+    }
 
-  const obs=new IntersectionObserver(ents=>{
-    ents.forEach(ent=>{
-      if(ent.isIntersecting){ updateDots(sections.indexOf(ent.target)); }
+    window.addEventListener('keydown',e=>{
+      const tag=document.activeElement?.tagName;
+      if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable) return;
+      const idx=currentIndex();
+      if(['ArrowDown','PageDown'].includes(e.key)){ e.preventDefault(); goToIndex(idx+1); }
+      if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); goToIndex(idx-1); }
     });
-  },{root:container,threshold:0.6});
-  sections.forEach(s=>obs.observe(s));
 
-  function updateDots(activeIdx){
-    dots.forEach((d,i)=>d.setAttribute('aria-current',i===activeIdx?'true':'false'));
+    dots.forEach((btn,i)=>btn.addEventListener('click',()=>goToIndex(i)));
+
+    const obs=new IntersectionObserver(ents=>{
+      ents.forEach(ent=>{
+        if(ent.isIntersecting){ updateDots(sections.indexOf(ent.target)); }
+      });
+    },{root:container,threshold:0.6});
+    sections.forEach(s=>obs.observe(s));
+
+    function updateDots(activeIdx){
+      dots.forEach((d,i)=>d.setAttribute('aria-current',i===activeIdx?'true':'false'));
+    }
+  } catch (err) {
+    // fail silently but report to console for debugging
+    console.warn('Dots init failed:', err);
   }
 })();
+
+// ===== INTRO SEQUENCE CONTROL =====
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("introOverlay");
+  const slides = document.getElementById("slides");
+  const typeTarget = document.getElementById("typeTarget");
+
+  // (Previously there was an optional sessionStorage-based skip here; removed to reduce unused commented code.)
+
+  // Typing animation watcher (safe: handles missing target)
+  function waitForTyping(callback) {
+    if (!typeTarget) {
+      // nothing to type — call back after a short delay so intro still shows briefly
+      return setTimeout(callback, 600);
+    }
+
+    // dataset may contain literal "\n" sequences; convert to real newlines for display
+    const raw = typeTarget.dataset.text || "";
+    const text = raw.replace(/\\n/g, "\n");
+    let index = 0;
+
+    function typeChar() {
+      if (index < text.length) {
+        // increment first so the final character is rendered
+        index++;
+        // replace newline with <br> for visual line breaks
+        const display = text.slice(0, index).replace(/\n/g, "<br>");
+        typeTarget.innerHTML = display + '<span class="caret"></span>';
+  setTimeout(typeChar, 60); // typing speed (slightly slower)
+      } else {
+        callback();
+      }
+    }
+    typeChar();
+  }
+
+  waitForTyping(() => {
+    // Hang for 1s after typing completes, then start fade-out animation
+    setTimeout(() => {
+      if (overlay) overlay.classList.add("fade-out");
+
+      // Wait for the fade-out animation to finish (matches CSS 1s) then hide/reveal
+      setTimeout(() => {
+        if (overlay) overlay.style.display = "none";
+        if (slides) {
+          slides.classList.remove("hidden");
+          slides.classList.add("reveal");
+
+          // Auto-scroll to the first slide inside the main slides container
+          slides.querySelector('section.slide')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+  // remember intro played (disabled by default)
+      }, 1000);
+    }, 1500);
+  });
+});

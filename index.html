@@ -8,26 +8,30 @@
 </head>
 <body>
     
+  
+  <!-- <div class="keyhint">Use ↑ / ↓ to navigate</div> -->
+
+<div id="introOverlay" class="intro-overlay">
+  <section class="slide slide--hero" id="s0">
+    <div class="hero" id="hero">
+      <img id="heroImg" class="hero-img" src="./images/computer.jpg" alt="Retro computer">
+      <div id="screen" class="crt-screen" aria-live="polite">
+        <div class="typewrap" id="typeTarget"
+            data-text="> system startup initiated...\n> loading web developer v2.0 (Sophia Crawshaw)\n> ready for your next big idea.">
+          <span class="caret"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<main class="slides hidden" id="slides" tabindex="-1">
+
   <div class="dots" id="dots-container">
     <!-- Dots will be generated dynamically by JS -->
   </div>
 
-  <!-- <div class="keyhint">Use ↑ / ↓ to navigate</div> -->
-
-  <main class="slides" id="slides" tabindex="-1">
-    <!-- Slide 1: CRT intro -->
-    <section class="slide slide--hero" id="s1">
-      <div class="hero" id="hero">
-        <img id="heroImg" class="hero-img" src="./images/computer.jpg" alt="Retro computer" />
-        <div id="screen" class="crt-screen" aria-live="polite" aria-atomic="true">
-          <div class="typewrap" id="typeTarget"
-              data-text="> system startup initiated...\n> loading web developer v2.0 (Sophia Crawshaw)\n> ready for your next big idea.">
-            <span class="caret"></span>
-          </div>
-        </div>
-      </div>
-      
-    </section>
+  <!-- your real slides begin here -->
 
    <section class="slide slide--intro">
     <div class="intro-wrap">
