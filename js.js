@@ -119,17 +119,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (introComplete) return;
     introComplete = true;
     
+    // Start revealing slides immediately for cross-fade effect
+    if (slides) {
+      slides.classList.remove("hidden");
+      slides.classList.add("reveal");
+    }
+    
     if (overlay) {
       overlay.classList.add("fade-out");
       setTimeout(() => {
         overlay.style.display = "none";
-      }, 300);
-    }
-    
-    if (slides) {
-      slides.classList.remove("hidden");
-      slides.classList.add("reveal");
-      slides.querySelector('section.slide')?.scrollIntoView({ behavior: 'smooth' });
+      }, 1200);
     }
   }
 
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // replace newline with <br> for visual line breaks
         const display = text.slice(0, index).replace(/\n/g, "<br>");
         typeTarget.innerHTML = display + '<span class="caret"></span>';
-  setTimeout(typeChar, 60); // typing speed (slightly slower)
+  setTimeout(typeChar, 45); // typing speed
       } else {
         callback();
       }

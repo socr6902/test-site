@@ -1126,11 +1126,18 @@ body {
 
 /* Fade-out when done */
 .intro-overlay.fade-out {
-  animation: introFadeOut 1s ease forwards;
+  animation: introFadeOut 1.2s ease-out forwards;
 }
 
 @keyframes introFadeOut {
-  to { opacity: 0; transform: scale(1.02); }
+  0% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: scale(1.01); 
+  }
 }
 
 /* Hide slides until intro is done */
@@ -1142,5 +1149,5 @@ body {
 .slides.reveal {
   opacity: 1;
   pointer-events: auto;
-  transition: opacity 0.9s ease;
+  transition: opacity 1.4s ease-out;
 }
