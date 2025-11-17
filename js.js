@@ -162,3 +162,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   });
 });
+
+// ===== Skills one-at-a-time auto-scroll =====
+(function () {
+  const track = document.getElementById('skillsTrack');
+  if (!track) return;
+
+  // Respect reduced-motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
+  const STEP_EVERY = 2000;   // time between shifts
+  const ANIM_MS   = 450;     // how long one shift takes
+  const GAP       = 10;      // must match .skill-chip margin-right
+
+  function step() {
+    const first = track.firstElementChild;
+    if (!first) return;
+
+    const shift = first.offsetWidth + GAP;
+
+    track.style.transition = `transform ${ANIM_MS}ms ease-in-out`;
+    track.style.transform = `translateX(${-shift}px)`;
+
+    // after animation, move first chip to the end and reset
+    setTimeout(() => {
+      track.style.transition = 'none';
+      track.appendChild(first);
+      track.style.transform = 'translateX(0)';
+    }, ANIM_MS);
+  }
+
+  setInterval(step, STEP_EVERY);
+})();

@@ -40,7 +40,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #fff;
+  background: color-mix(in srgb, var(--color-cream) 0%, #ffffff 100%);
   box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.07);
   border-radius: 999px;
   padding: 8px 20px;
@@ -327,7 +327,7 @@ body {
 /* ===== Slide 2: Services ===== */
 
 .slide--services {
-  background: var(--color-orange);
+  background: var(--color-cream);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -350,7 +350,7 @@ body {
 }
 
 .services-title {
-  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
   line-height: 1.2;
   margin: 0;
   color: var(--color-carbon);
@@ -362,15 +362,15 @@ body {
   opacity: 0.9;
 }
 
-/* grid of services — 4 → 2x2 → 1 */
+/* grid of services — 3 cards across full width */
 
 .services-grid {
   display: grid;
   gap: clamp(18px, 2vw, 28px);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* 2x2 on medium screens */
+/* 2 columns on medium screens */
 @media (max-width: 980px) {
   .services-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -389,24 +389,16 @@ body {
 .service-item {
   padding: clamp(18px, 2.2vw, 24px);
   border-radius: 20px;
-  background: var(--color-cream);
+  background:  #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.04);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
-}
-
-/* all service items yellow (gold) */
-.service-item:nth-child(4n + 1),
-.service-item:nth-child(4n + 2),
-.service-item:nth-child(4n + 3),
-.service-item:nth-child(4n + 4) {
-  background: color-mix(in srgb, var(--color-gold) 55%, #ffffff 45%);
 }
 
 .service-item h3 {
   font-size: 0.98rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  margin: 0 0 6px;
+  margin: 0 0 16px;
   color: var(--color-carbon);
 }
 
@@ -417,30 +409,102 @@ body {
   color: var(--color-carbon);
 }
 
-/* micro-tag strip */
+.service-item ul {
+  margin: 0;
+  padding: 0 0 0 1.2em;
+  list-style: none;
+}
 
-.services-tags {
+.service-item ul li {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  color: var(--color-carbon);
+  position: relative;
+  padding-left: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.service-item ul li:before {
+  content: "•";
+  position: absolute;
+  left: -1em;
+  color: var(--color-carbon);
+  opacity: 0.6;
+}
+
+.service-item ul li:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== Skills strip under Services ===== */
+
+.skills-strip {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 4px;
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+  max-width: 100%;
+  overflow: hidden;      /* prevent the row itself from pushing the page */
 }
 
-/* Colored chip cycle – cream */
-.services-tags span:nth-child(3n + 1),
-.services-tags span:nth-child(3n + 2),
-.services-tags span:nth-child(3n + 3) {
-  background: var(--color-cream);
+.skills-window {
+  flex: 1 1 auto;
+  min-width: 0;          /* <-- critical: let the window shrink */
+  overflow: hidden;      /* clip anything past the right edge */
 }
 
-.services-tags span {
+/* keep the track as-is */
+.skills-track {
+  display: flex;
+  align-items: center;
+  will-change: transform;
+}
+
+
+.skills-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+
+/* individual chips */
+.skill-chip {
   font-size: 0.75rem;
   padding: 5px 11px;
   border-radius: 999px;
+  background: var(--color-cream);
   color: var(--color-carbon);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  opacity: 0.9;
+  white-space: nowrap;
+  opacity: 0.95;
+  margin-right: 10px;        /* used in JS for step size */
+}
+
+/* last chip doesn’t need extra gap */
+.skill-chip:last-child {
+  margin-right: 0;
+}
+
+/* multicolor chips - assigned by data-color attribute */
+.skill-chip[data-color="gold"] { background: var(--color-gold); }
+.skill-chip[data-color="blush"] { background: var(--color-blush); }
+.skill-chip[data-color="green"] { background: var(--color-green); }
+.skill-chip[data-color="steel"] { background: var(--color-steel); }
+.skill-chip[data-color="orange"] { background: var(--color-orange); }
+.skill-chip[data-color="cream"] { background: var(--color-cream); }
+
+/* reduced motion = no auto-scroll */
+@media (prefers-reduced-motion: reduce) {
+  .skills-track {
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 /* ===== Slide 3: Selected Work ===== */
@@ -469,7 +533,7 @@ body {
 }
 
 .work-title {
-  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
   line-height: 1.2;
   margin: 0;
   color: var(--color-carbon);
@@ -509,7 +573,8 @@ body {
   overflow: hidden;
   background: var(--color-cream);
   border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.04);
+  /* slightly stronger base shadow for more perceived depth */
+  box-shadow: 0 14px 40px rgba(18, 20, 22, 0.1);
   display: grid;
   grid-template-rows: auto 1fr;
   transition: transform 0.22s ease, box-shadow 0.22s ease;
@@ -517,8 +582,9 @@ body {
 
 /* subtle hover */
 .work-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  /* stronger hover shadow for a more noticeable lift */
+  box-shadow: 0 22px 60px rgba(18, 20, 22, 0.12);
 }
 
 /* thumbnail at top */
@@ -651,7 +717,7 @@ body {
 /* ===== Slide 4: About ===== */
 
 .slide--about {
-  background: var(--color-blush);
+  background: color-mix(in srgb, var(--color-steel) 24%, #ffffff 76%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -712,7 +778,7 @@ body {
 }
 
 .about-title {
-  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+  font-size: clamp(2.2rem, 4.2vw, 3.2rem);
   line-height: 1.2;
   margin: 0;
 }
@@ -841,7 +907,7 @@ body {
 }
 
 .contact-title {
-  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+  font-size: clamp(2.2rem, 4.2vw, 3.2rem);
   line-height: 1.2;
   margin: 0;
 }
