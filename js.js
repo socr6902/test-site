@@ -69,7 +69,18 @@ document.addEventListener('mousemove', e => {
 (function(){
   const container=document.getElementById('slides');
   const sections=[...container.querySelectorAll('section.slide')];
-  const dots=[...document.querySelectorAll('.dot')];
+  const dotsContainer=document.getElementById('dots-container');
+
+  // Generate dots dynamically based on number of slides
+  sections.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dot';
+    btn.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+    btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    dotsContainer.appendChild(btn);
+  });
+
+  const dots=[...dotsContainer.querySelectorAll('.dot')];
 
   function currentIndex(){
     let idx=0,min=Infinity;
