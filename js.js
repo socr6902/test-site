@@ -138,9 +138,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === 'Enter' && !introComplete) {
       skipIntro();
       document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener('touchstart', handleTap);
     }
   }
+  
+  // Allow tap/touch to skip intro on mobile
+  function handleTap(e) {
+    if (!introComplete) {
+      skipIntro();
+      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener('touchstart', handleTap);
+    }
+  }
+  
   document.addEventListener('keydown', handleKeyPress);
+  document.addEventListener('touchstart', handleTap);
 
   // Typing animation watcher (safe: handles missing target)
   function waitForTyping(callback) {
@@ -178,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (introComplete) return;
       skipIntro();
       document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener('touchstart', handleTap);
     }, 1000);
   });
 });
