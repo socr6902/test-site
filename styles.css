@@ -690,7 +690,7 @@ body {
 }
 
 .work-tag--soft {
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--color-orange) 38%, #ffffff 62%);
   opacity: 0.9;
 }
 
